@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id         Int          @id @default(autoincrement())
+  email      String?      @db.VarChar
+  password   String?      @db.VarChar
+  eleve      eleve[]
+  enseignant enseignant[]
+}
+
+model eleve {
+  id                   Int     @id @default(autoincrement())
+  prenom               String? @db.VarChar
+  name                 String? @db.VarChar
+  formation            String? @db.VarChar
+  date_debut_formation String? @db.VarChar
+  date_fin_formation   String? @db.VarChar
+  id_user              Int?    @unique
+  user                 user?   @relation(fields: [id_user], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model enseignant {
+  id      Int     @id @default(autoincrement())
+  name    String? @db.VarChar
+  id_user Int?    @unique
+  user    user?   @relation(fields: [id_user], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+// model enseignant {
+//   id      Int     @id @default(autoincrement())
+//   name    String? @db.VarChar
+//   id_user Int?    @unique
+//   user    user?   @relation(fields: [id_user], references: [id], onDelete: Cascade, onUpdate: Cascade)
+// }
+
+// model eleve {
+//   id                   Int       @id @default(autoincrement())
+//   prenom               String?   @db.VarChar
+//   name                 String?   @db.VarChar
+//   formation            String?   @db.VarChar
+//   date_debut_formation DateTime? @db.Date
+//   date_fin_formation   DateTime? @db.Date
+//   id_user              Int?      @unique
+//   user                 user?     @relation(fields: [id_user], references: [id], onDelete: Cascade, onUpdate: Cascade)
+// }
+
+model matiere {
+  id          Int     @id @default(autoincrement())
+  name        String? @db.VarChar
+  description String?
+}
+
+model salle {
+  id     Int     @id @default(autoincrement())
+  numero String?
+}
